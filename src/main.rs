@@ -51,8 +51,18 @@ impl BinPattern {
             return None;
         }
 
+        // Obtener el Magic number para determinar si es PE32 o PE64
+        let magic = u16::from_le_bytes(data[pe_offset + 24..pe_offset + 26].try_into().ok()?);
+        
+        // Calcular el tamaño del Optional Header basado en el formato
+        let optional_header_size = match magic {
+            0x10b => 0xE0, // PE32
+            0x20b => 0xF0, // PE32+ (64 bits)
+            _ => return None,
+        };
+
         let num_sections = u16::from_le_bytes(data[pe_offset + 6..pe_offset + 8].try_into().ok()?) as usize;
-        let section_table_offset = pe_offset + 0xF8;
+        let section_table_offset = pe_offset + 24 + optional_header_size;
 
         for i in 0..num_sections {
             let section_offset = section_table_offset + (i * 40);
@@ -62,8 +72,8 @@ impl BinPattern {
 
             let name = &data[section_offset..section_offset + 8];
             if name.starts_with(b".text") {
-                let raw_offset = u32::from_le_bytes(data[section_offset + 20..section_offset + 24].try_into().ok()?) as usize;
                 let raw_size = u32::from_le_bytes(data[section_offset + 16..section_offset + 20].try_into().ok()?) as usize;
+                let raw_offset = u32::from_le_bytes(data[section_offset + 20..section_offset + 24].try_into().ok()?) as usize;
 
                 if raw_offset + raw_size <= data.len() {
                     return Some(data[raw_offset..raw_offset + raw_size].to_vec());
