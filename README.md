@@ -25,8 +25,7 @@ Usage
 - arg3: hello world compiled with same compiler to exclude runtime patterns.
 
 
-::
-
+```
   cargo run --release --  ~/samples/ 10 runtime/golang_hello_world.exe
 
   Compiler: Golang
@@ -39,11 +38,16 @@ Usage
     $code03 = {8b093b6108762583ec0c8b4424108400890424e8}
     $code04 = {093b6108762583ec0c8b44241084008904248b44}
     progress: 1%
-
+```
 
 Installing Rust
 ---------------
 https://rustup.rs/
+
+
+Installing from crates.io
+-------------------------
+cargo install binpattern
 
 
 Python verison
