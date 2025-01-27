@@ -2,6 +2,11 @@
 name = "binpattern"
 version = "0.1.0"
 edition = "2021"
+authors = ["sha0coder"]
+license = "MIT"
+description = "binary code pattern extractor for yaras."
+repository = "https://github.com/sha0coder/binpattern"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 hex = "0.4"
