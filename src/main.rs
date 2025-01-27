@@ -151,7 +151,6 @@ impl BinPattern {
     }
 
     fn detect_compiler(data: &[u8]) -> &'static str {
-        // Buscar strings comunes de cada compilador
         let content = String::from_utf8_lossy(data);
         
         if content.contains("rust_panic") || content.contains("rust_begin_unwind") {
@@ -161,27 +160,76 @@ impl BinPattern {
         if content.contains("Go build ID:") || content.contains("golang") {
             return "Golang";
         }
-        
-        if content.contains("GCC: (GNU)") || content.contains("__MINGW_IMPORT") {
-            return "MinGW/GCC";
+
+        if content.contains("Microsoft Visual C++") {
+            if content.contains("14.") {
+                return "MSVC (Visual C++ 2015-2022)";
+            } else if content.contains("12.") {
+                return "MSVC (Visual C++ 2013)";
+            } else if content.contains("11.") {
+                return "MSVC (Visual C++ 2012)";
+            } else if content.contains("10.") {
+                return "MSVC (Visual C++ 2010)";
+            }
+            return "MSVC (Visual C++)";
         }
 
-        if content.contains("Borland\\Delphi") || content.contains("FastMM") {
-            return "Delphi";
-        }
-
-        // MSVC tiene secciones específicas
-        if data.windows(16).any(|window| {
-            window.starts_with(b".CRT$XCA") || 
-            window.starts_with(b".CRT$XCU") ||
-            window.starts_with(b".CRT$XCL")
-        }) {
+        if content.contains("_MSC_VER") || 
+           content.contains("vcruntime") ||
+           data.windows(16).any(|window| {
+               window.starts_with(b".CRT$XCA") || 
+               window.starts_with(b".CRT$XCU") ||
+               window.starts_with(b".CRT$XCL")
+           }) {
             return "MSVC";
         }
+        
+        if content.contains("GCC: (GNU)") {
+            if content.contains("__MINGW") {
+                return "MinGW-GCC";
+            }
+            if content.contains("__cplusplus") {
+                return "GCC (C++)";
+            }
+            return "GCC (C)";
+        }
 
-        // Clang/LLVM tiene strings específicos
-        if content.contains("clang version") || content.contains("LLVM") {
-            return "Clang/LLVM";
+        if content.contains("clang version") {
+            if content.contains("__cplusplus") {
+                return "Clang (C++)";
+            }
+            return "Clang (C)";
+        }
+
+        if content.contains("LLVM") {
+            return "LLVM";
+        }
+
+        if content.contains("Intel(R) C++ Compiler") || content.contains("Intel(R) ICC") {
+            return "Intel C/C++";
+        }
+
+        if content.contains("Borland\\") {
+            if content.contains("Borland\\C++") {
+                return "Borland C++";
+            }
+            if content.contains("Borland\\Delphi") {
+                return "Delphi";
+            }
+            return "Borland";
+        }
+
+        if content.contains("__cplusplus") || 
+           content.contains("std::") ||
+           content.contains("operator new") ||
+           content.contains("operator delete") {
+            return "C++ (Unknown Compiler)";
+        }
+
+        if content.contains("libc") ||
+           content.contains("_GLOBAL_OFFSET_TABLE_") ||
+           content.contains("__FUNCTION__") {
+            return "C (Unknown Compiler)";
         }
 
         "Unknown"
