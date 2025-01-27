@@ -23,12 +23,12 @@ arg3: hello world compiled with same compiler to exclude runtime patterns.
 
 cargo run --release --  ~/samples/ 10 runtime/golang_hello_world.exe
 
-...
+::
+
   Compiler: Golang
   Architecture: x86 (32-bit)
   GUI: Yes
-
-loaded 6 .text blobs::
+  loaded 6 .text blobs:
 
     $code01 = {648b098b093b6108762583ec0c8b442410840089}
     $code02 = {008904248b442424894424088b44242089442404}
