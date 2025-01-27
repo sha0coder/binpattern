@@ -21,9 +21,10 @@ arg1: folder to start the recusrive lookup of .bin .exe and .dll
 arg2: pattern length ideally 10-25 or sometimes less.
 arg3: hello world compiled with same compiler to exclude runtime patterns.
 
-cargo run --release --  ~/samples/ 10 runtime/golang_hello_world.exe
 
 ::
+
+  cargo run --release --  ~/samples/ 10 runtime/golang_hello_world.exe
 
   Compiler: Golang
   Architecture: x86 (32-bit)
