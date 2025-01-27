@@ -29,6 +29,7 @@ cargo run --release --  ~/samples/ 10 runtime/golang_hello_world.exe
   GUI: Yes
 
 loaded 6 .text blobs::
+
     $code01 = {648b098b093b6108762583ec0c8b442410840089}
     $code02 = {008904248b442424894424088b44242089442404}
     $code03 = {8b093b6108762583ec0c8b4424108400890424e8}
