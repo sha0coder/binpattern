@@ -17,9 +17,12 @@ with interesting ideas of Peter to implement.
 
 Usage
 -----
-arg1: folder to start the recusrive lookup of .bin .exe and .dll
-arg2: pattern length ideally 10-25 or sometimes less.
-arg3: hello world compiled with same compiler to exclude runtime patterns.
+
+- arg1: folder to start the recursive lookup of .bin .exe and .dll
+
+- arg2: pattern length ideally 10-25 or sometimes less.
+
+- arg3: hello world compiled with same compiler to exclude runtime patterns.
 
 
 ::
